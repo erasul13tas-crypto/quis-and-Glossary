@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Carbohydrate Metabolism Glossary Quiz</title>
+<style>
+:root{--bg:#eef3ef;--card:#ffffff;--ink:#16231d;--mute:#5b6b63;--line:#cfdad3;--acc:#1f7a4d;--accInk:#ffffff;--ok:#1f7a4d;--okBg:#dff2e6;--bad:#b4472a;--badBg:#f9e3dc;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a15;--card:#18271f;--ink:#e8f1ec;--mute:#9bb0a5;--line:#2c4136;--acc:#4fc58a;--accInk:#0b1b13;--ok:#6fd9a3;--okBg:#1c3a2a;--bad:#f0907a;--badBg:#3b2119;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1a15;--card:#18271f;--ink:#e8f1ec;--mute:#9bb0a5;--line:#2c4136;--acc:#4fc58a;--accInk:#0b1b13;--ok:#6fd9a3;--okBg:#1c3a2a;--bad:#f0907a;--badBg:#3b2119;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.5;min-height:100vh}
+main{max-width:640px;margin:0 auto;padding:20px 16px 48px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+h1{font-size:1.25rem;margin:0;line-height:1.25}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;flex:none}
+.lang button{font:600 .85rem Arial,sans-serif;padding:8px 14px;border:0;background:transparent;color:var(--ink);cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--acc);color:var(--accInk)}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:8px}
+.bar i{display:block;height:100%;background:var(--acc);transition:width .3s}
+.meta{font:.85rem Arial,sans-serif;color:var(--mute);margin-bottom:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.q{font-size:1.2rem;margin:0 0 16px;line-height:1.4}
+.opt{display:block;width:100%;text-align:left;font:1rem Arial,sans-serif;padding:14px;margin-bottom:10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--acc)}
+.opt:focus-visible,.btn:focus-visible,.lang button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.opt.ok{background:var(--okBg);border-color:var(--ok)}
+.opt.bad{background:var(--badBg);border-color:var(--bad)}
+.exp{font:.95rem Arial,sans-serif;background:var(--bg);border-radius:10px;padding:12px;margin:6px 0 16px}
+.btn{font:600 1rem Arial,sans-serif;padding:12px 22px;border:0;border-radius:10px;background:var(--acc);color:var(--accInk);cursor:pointer}
+.score{font-size:3rem;margin:8px 0}
+</style>
+</head>
+<body>
+<main>
+<header><h1 id="title"></h1>
+<div class="lang" role="group" aria-label="Language"><button id="bEN" aria-pressed="true">EN</button><button id="bRU" aria-pressed="false">RU</button></div></header>
+<div class="bar"><i id="fill"></i></div>
+<div class="meta" id="meta"></div>
+<div class="card" id="box"></div>
+</main>
+<script>
+var T={en:{title:"Carbohydrate Metabolism Glossary Quiz",q:"Question",of:"of",next:"Next question",fin:"See result",again:"Try again",right:"Correct.",wrong:"Not quite.",done:"Your score",good:"Excellent work.",mid:"Good start. Review the explanations and try again.",low:"Review lecture 10 and try again."},
+ru:{title:"Тест по глоссарию: метаболизм углеводов",q:"Вопрос",of:"из",next:"Следующий вопрос",fin:"Показать результат",again:"Пройти заново",right:"Верно.",wrong:"Не совсем.",done:"Ваш результат",good:"Отличная работа.",mid:"Хороший старт. Прочитайте пояснения и попробуйте снова.",low:"Повторите лекцию 10 и попробуйте снова."}};
+var Q=[
+{c:2,en:["What is “Photosynthesis”?",["Breakdown of glucose to CO₂ and H₂O, producing ATP","Anaerobic production of ATP","Conversion of light energy to chemical energy, fixing CO₂ into carbohydrates","Hydrolysis of starch into sugars"],"Photosynthesis: 6 CO₂ + 6 H₂O + light → C₆H₁₂O₆ + 6 O₂."],ru:["Что такое «Photosynthesis» (фотосинтез)?",["Расщепление глюкозы до CO₂ и H₂O с образованием АТФ","Анаэробное получение АТФ","Превращение энергии света в химическую энергию с фиксацией CO₂ в углеводы","Гидролиз крахмала до сахаров"],"Фотосинтез: 6 CO₂ + 6 H₂O + свет → C₆H₁₂O₆ + 6 O₂."]},
+{c:0,en:["What are “Light reactions”?",["Light-dependent ATP and NADPH synthesis in thylakoid membranes","Light-independent carbon fixation in the stroma","Oxidation of acetyl-CoA in mitochondria","Breakdown of glucose in the cytosol"],"They split water, release O₂, and make ATP and NADPH for the Calvin cycle."],ru:["Что такое «Light reactions» (световые реакции)?",["Зависимый от света синтез АТФ и НАДФН в мембранах тилакоидов","Фиксация углерода в строме, не зависящая от света","Окисление ацетил-КоА в митохондриях","Расщепление глюкозы в цитозоле"],"Они расщепляют воду, выделяют O₂ и образуют АТФ и НАДФН для цикла Кальвина."]},
+{c:3,en:["What is the “Calvin cycle”?",["Light-dependent ATP synthesis in thylakoids","Anaerobic production of ATP","A test for starch","Carbon fixation reactions in the stroma that use ATP and NADPH"],"It is not truly “dark”: it runs in the light, using ATP and NADPH from the light reactions."],ru:["Что такое «Calvin cycle» (цикл Кальвина)?",["Зависимый от света синтез АТФ в тилакоидах","Анаэробное получение АТФ","Тест на крахмал","Реакции фиксации углерода в строме, использующие АТФ и НАДФН"],"Он не совсем «тёмный»: идёт на свету и использует АТФ и НАДФН из световых реакций."]},
+{c:1,en:["What is “Rubisco”?",["An enzyme that breaks down starch in germinating seeds","The key carbon fixation enzyme (RuBP carboxylase/oxygenase)","An electron carrier in the thylakoid membrane","The sugar transported in the phloem"],"Rubisco attaches CO₂ to RuBP. It can also react with O₂ (photorespiration)."],ru:["Что такое «Rubisco»?",["Фермент, расщепляющий крахмал при прорастании семян","Ключевой фермент фиксации углерода (RuBP карбоксилаза/оксигеназа)","Переносчик электронов в мембране тилакоида","Сахар, транспортируемый по флоэме"],"Rubisco присоединяет CO₂ к RuBP. Он может также реагировать с O₂ (фотодыхание)."]},
+{c:2,en:["What is a “C3 plant”?",["A plant that fixes CO₂ at night","A plant that concentrates CO₂ in bundle sheath cells","A plant using only the Calvin cycle for carbon fixation (most plants)","A plant that does not photosynthesize"],"Examples: wheat, rice, soybean, potato. Their water use efficiency is low."],ru:["Что такое «C3 plant» (растение C3)?",["Растение, фиксирующее CO₂ ночью","Растение, концентрирующее CO₂ в клетках обкладки пучка","Растение, использующее для фиксации углерода только цикл Кальвина (большинство растений)","Растение, не осуществляющее фотосинтез"],"Примеры: пшеница, рис, соя, картофель. Эффективность использования воды у них низкая."]},
+{c:1,en:["What is “Glycolysis”?",["Oxidation of acetyl-CoA in the mitochondrial matrix","Breakdown of glucose to pyruvate in the cytosol","Synthesis of starch from ADP-glucose","Fixation of CO₂ by Rubisco"],"Net yield per glucose: 2 pyruvate, 2 ATP, and 2 NADH."],ru:["Что такое «Glycolysis» (гликолиз)?",["Окисление ацетил-КоА в матриксе митохондрий","Расщепление глюкозы до пирувата в цитозоле","Синтез крахмала из АДФ-глюкозы","Фиксация CO₂ ферментом Rubisco"],"Чистый выход на одну глюкозу: 2 пирувата, 2 АТФ и 2 НАДН."]},
+{c:0,en:["What is “Cellular respiration”?",["Breakdown of glucose to CO₂ and H₂O, producing ATP","Using light to fix CO₂ into carbohydrates","A test for reducing sugars","Formation of cellulose in cell walls"],"Aerobic respiration yields about 30-32 ATP per glucose."],ru:["Что такое «Cellular respiration» (клеточное дыхание)?",["Расщепление глюкозы до CO₂ и H₂O с образованием АТФ","Фиксация CO₂ в углеводы с использованием света","Тест на восстанавливающие сахара","Образование целлюлозы в клеточных стенках"],"Аэробное дыхание даёт около 30-32 АТФ на глюкозу."]},
+{c:3,en:["What is “Starch”?",["A branched protein of the cell wall","A disaccharide of glucose and fructose","An unbranched β-1,4 glucose polymer","A glucose polymer (amylose + amylopectin), the plant energy store"],"Cellulose is the β-1,4 polymer. Starch is the storage carbohydrate."],ru:["Что такое «Starch» (крахмал)?",["Разветвлённый белок клеточной стенки","Дисахарид из глюкозы и фруктозы","Неразветвлённый полимер глюкозы с β-1,4 связями","Полимер глюкозы (амилоза + амилопектин), запас энергии растений"],"β-1,4 полимер это целлюлоза. Крахмал запасной углевод."]},
+{c:2,en:["What is “Benedict’s test”?",["A test for starch using iodine","A test for proteins","A chemical test for reducing sugars (Cu²⁺ reduced to Cu₂O)","A test for chlorophyll"],"A positive result goes from blue to brick red. Sucrose is negative."],ru:["Что такое «Benedict’s test» (тест Бенедикта)?",["Тест на крахмал с помощью йода","Тест на белки","Химический тест на восстанавливающие сахара (Cu²⁺ восстанавливается до Cu₂O)","Тест на хлорофилл"],"Положительный результат: от синего до кирпично-красного. Сахароза даёт отрицательный результат."]},
+{c:1,en:["What is the “Iodine test”?",["A test for reducing sugars","A test for starch (blue-black amylose-iodine complex)","A test for cellulose","A test for vitamin C"],"Yellow-brown means no starch."],ru:["Что такое «Iodine test» (тест с йодом)?",["Тест на восстанавливающие сахара","Тест на крахмал (сине-чёрный комплекс амилозы с йодом)","Тест на целлюлозу","Тест на витамин C"],"Жёлто-коричневый цвет означает, что крахмала нет."]}
+];var L="en",i=0,s=0,done=false;
+var $=function(x){return document.getElementById(x)};
+function render(){
+ var t=T[L];document.documentElement.lang=L;document.title=t.title;$("title").textContent=t.title;
+ $("bEN").setAttribute("aria-pressed",L=="en");$("bRU").setAttribute("aria-pressed",L=="ru");
+ var box=$("box");
+ if(i>=Q.length){
+  $("fill").style.width="100%";$("meta").textContent="";
+  var m=s>=9?t.good:s>=6?t.mid:t.low;
+  box.innerHTML='<div>'+t.done+'</div><div class="score">'+s+' / '+Q.length+'</div><p>'+m+'</p><button class="btn" id="again">'+t.again+'</button>';
+  $("again").onclick=function(){i=0;s=0;done=false;render()};return;
+ }
+ var q=Q[i],d=q[L];
+ $("fill").style.width=(i/Q.length*100)+"%";
+ $("meta").textContent=t.q+" "+(i+1)+" "+t.of+" "+Q.length;
+ var h='<p class="q">'+d[0]+'</p>';
+ d[1].forEach(function(o,k){
+  var cls="opt";if(done){if(k==q.c)cls+=" ok";else if(k==done.k)cls+=" bad"}
+  h+='<button class="'+cls+'" data-k="'+k+'"'+(done?" disabled":"")+'>'+o+'</button>';
+ });
+ if(done){h+='<div class="exp"><b>'+(done.k==q.c?t.right:t.wrong)+'</b> '+d[2]+'</div><button class="btn" id="nx">'+(i==Q.length-1?t.fin:t.next)+'</button>'}
+ box.innerHTML=h;
+ box.querySelectorAll(".opt").forEach(function(b){b.onclick=function(){if(done)return;var k=+b.dataset.k;done={k:k};if(k==q.c)s++;render()}});
+ if(done)$("nx").onclick=function(){i++;done=false;render()};
+}
+$("bEN").onclick=function(){L="en";render()};
+$("bRU").onclick=function(){L="ru";render()};
+render();
+</script>
+</body>
+</html>

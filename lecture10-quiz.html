@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Carbohydrate Metabolism Quiz</title>
+<style>
+:root{--bg:#eef3ef;--card:#ffffff;--ink:#16231d;--mute:#5b6b63;--line:#cfdad3;--acc:#1f7a4d;--accInk:#ffffff;--ok:#1f7a4d;--okBg:#dff2e6;--bad:#b4472a;--badBg:#f9e3dc;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a15;--card:#18271f;--ink:#e8f1ec;--mute:#9bb0a5;--line:#2c4136;--acc:#4fc58a;--accInk:#0b1b13;--ok:#6fd9a3;--okBg:#1c3a2a;--bad:#f0907a;--badBg:#3b2119;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1a15;--card:#18271f;--ink:#e8f1ec;--mute:#9bb0a5;--line:#2c4136;--acc:#4fc58a;--accInk:#0b1b13;--ok:#6fd9a3;--okBg:#1c3a2a;--bad:#f0907a;--badBg:#3b2119;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.5;min-height:100vh}
+main{max-width:640px;margin:0 auto;padding:20px 16px 48px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+h1{font-size:1.25rem;margin:0;line-height:1.25}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;flex:none}
+.lang button{font:600 .85rem Arial,sans-serif;padding:8px 14px;border:0;background:transparent;color:var(--ink);cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--acc);color:var(--accInk)}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:8px}
+.bar i{display:block;height:100%;background:var(--acc);transition:width .3s}
+.meta{font:.85rem Arial,sans-serif;color:var(--mute);margin-bottom:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.q{font-size:1.2rem;margin:0 0 16px;line-height:1.4}
+.opt{display:block;width:100%;text-align:left;font:1rem Arial,sans-serif;padding:14px;margin-bottom:10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--acc)}
+.opt:focus-visible,.btn:focus-visible,.lang button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.opt.ok{background:var(--okBg);border-color:var(--ok)}
+.opt.bad{background:var(--badBg);border-color:var(--bad)}
+.exp{font:.95rem Arial,sans-serif;background:var(--bg);border-radius:10px;padding:12px;margin:6px 0 16px}
+.btn{font:600 1rem Arial,sans-serif;padding:12px 22px;border:0;border-radius:10px;background:var(--acc);color:var(--accInk);cursor:pointer}
+.score{font-size:3rem;margin:8px 0}
+</style>
+</head>
+<body>
+<main>
+<header><h1 id="title"></h1>
+<div class="lang" role="group" aria-label="Language"><button id="bEN" aria-pressed="true">EN</button><button id="bRU" aria-pressed="false">RU</button></div></header>
+<div class="bar"><i id="fill"></i></div>
+<div class="meta" id="meta"></div>
+<div class="card" id="box"></div>
+</main>
+<script>
+var T={en:{title:"Carbohydrate Metabolism Quiz",q:"Question",of:"of",next:"Next question",fin:"See result",again:"Try again",right:"Correct.",wrong:"Not quite.",done:"Your score",good:"Excellent work.",mid:"Good start. Review the explanations and try again.",low:"Review lecture 10 and try again."},
+ru:{title:"Тест: метаболизм углеводов",q:"Вопрос",of:"из",next:"Следующий вопрос",fin:"Показать результат",again:"Пройти заново",right:"Верно.",wrong:"Не совсем.",done:"Ваш результат",good:"Отличная работа.",mid:"Хороший старт. Прочитайте пояснения и попробуйте снова.",low:"Повторите лекцию 10 и попробуйте снова."}};
+var Q=[
+{c:0,en:["Where do the light reactions of photosynthesis take place?",["Thylakoid membranes","Stroma","Cytosol","Inner mitochondrial membrane"],"Light reactions run in the thylakoid membranes; the Calvin cycle runs in the stroma."],ru:["Где происходят световые реакции фотосинтеза?",["Мембраны тилакоидов","Строма","Цитозоль","Внутренняя мембрана митохондрий"],"Световые реакции идут в мембранах тилакоидов, а цикл Кальвина в строме."]},
+{c:1,en:["Why is “dark reactions” a misleading name for the Calvin cycle?",["It needs no energy","It needs the ATP and NADPH made in the light reactions","It only runs at night","It happens in mitochondria"],"The cycle runs in the light because it uses ATP and NADPH from the light reactions."],ru:["Почему название «тёмные реакции» для цикла Кальвина вводит в заблуждение?",["Ему не нужна энергия","Ему нужны АТФ и НАДФН из световых реакций","Он идёт только ночью","Он происходит в митохондриях"],"Цикл идёт на свету, так как использует АТФ и НАДФН, созданные в световых реакциях."]},
+{c:2,en:["Which enzyme fixes CO₂ in the Calvin cycle?",["Amylase","PFK-1","Rubisco","Urease"],"Rubisco combines CO₂ with RuBP. It is slow and can also react with O₂."],ru:["Какой фермент фиксирует CO₂ в цикле Кальвина?",["Амилаза","PFK-1","Rubisco","Уреаза"],"Rubisco присоединяет CO₂ к RuBP. Он медленный и может реагировать также с O₂."]},
+{c:1,en:["Which plants concentrate CO₂ in bundle sheath cells and reduce photorespiration?",["C3 plants such as wheat","C4 plants such as corn","Only algae","No plants do this"],"C4 plants (corn, sugarcane, sorghum) use PEP carboxylase and Kranz anatomy."],ru:["Какие растения концентрируют CO₂ в клетках обкладки пучка и уменьшают фотодыхание?",["C3, например пшеница","C4, например кукуруза","Только водоросли","Таких растений нет"],"Растения C4 (кукуруза, сахарный тростник, сорго) используют PEP-карбоксилазу и кранц-анатомию."]},
+{c:3,en:["Why is sucrose the main transport sugar in plants?",["It is a reducing sugar","It is insoluble","It is easily broken down","It is non-reducing, very soluble, and stable"],"Being non-reducing, soluble, and stable, sucrose can travel in the phloem without reacting with proteins."],ru:["Почему сахароза основной транспортный сахар растений?",["Это восстанавливающий сахар","Она нерастворима","Она легко расщепляется","Она невосстанавливающая, хорошо растворима и стабильна"],"Сахароза невосстанавливающая, растворимая и стабильная, поэтому не реагирует с белками во флоэме."]},
+{c:1,en:["What is the net ATP yield of glycolysis per glucose?",["1","2","4","30"],"Glycolysis makes 4 ATP and uses 2, so the net is 2 ATP (plus 2 NADH and 2 pyruvate)."],ru:["Каков чистый выход АТФ при гликолизе на одну глюкозу?",["1","2","4","30"],"Гликолиз образует 4 АТФ и тратит 2, итого чистый выход 2 АТФ (плюс 2 НАДН и 2 пирувата)."]},
+{c:2,en:["About how many ATP does complete aerobic oxidation of one glucose yield?",["2","10","30-32","100"],"Most ATP comes from oxidative phosphorylation, giving about 30-32 ATP in total (about 32% efficiency)."],ru:["Сколько примерно АТФ даёт полное аэробное окисление одной глюкозы?",["2","10","30-32","100"],"Большая часть АТФ образуется при окислительном фосфорилировании: всего около 30-32 АТФ (КПД примерно 32%)."]},
+{c:0,en:["Which test detects reducing sugars, and what colour indicates a strong positive?",["Benedict’s test: brick red","Iodine test: blue-black","Benedict’s test: blue","Iodine test: yellow-brown"],"Benedict’s test turns from blue to brick red (Cu₂O) with reducing sugars. Sucrose is negative."],ru:["Какой тест выявляет восстанавливающие сахара и какой цвет означает сильный положительный результат?",["Тест Бенедикта: кирпично-красный","Тест с йодом: сине-чёрный","Тест Бенедикта: синий","Тест с йодом: жёлто-коричневый"],"С восстанавливающими сахарами реактив Бенедикта меняет цвет с синего на кирпично-красный (Cu₂O). Сахароза даёт отрицательный результат."]},
+{c:2,en:["A ripe apple is tested with iodine and Benedict’s reagent. What are the results?",["Blue-black and blue","Blue-black and brick red","Yellow-brown and brick red","Yellow-brown and blue"],"A ripe apple has very little starch (iodine stays yellow-brown) and lots of reducing sugars (brick red)."],ru:["Спелое яблоко проверяют йодом и реактивом Бенедикта. Каковы результаты?",["Сине-чёрный и синий","Сине-чёрный и кирпично-красный","Жёлто-коричневый и кирпично-красный","Жёлто-коричневый и синий"],"В спелом яблоке очень мало крахмала (йод остаётся жёлто-коричневым) и много восстанавливающих сахаров (кирпично-красный)."]},
+{c:3,en:["What happens to the tests as barley germinates?",["Iodine gets darker, Benedict’s stays blue","Both tests become negative","Both tests become positive","Iodine fades, Benedict’s becomes brick red"],"Gibberellic acid triggers α-amylase, which breaks starch into sugars: iodine fades and Benedict’s turns positive."],ru:["Что происходит с результатами тестов при прорастании ячменя?",["Йод темнеет, Бенедикт остаётся синим","Оба теста становятся отрицательными","Оба теста становятся положительными","Йод бледнеет, Бенедикт становится кирпично-красным"],"Гибберелловая кислота запускает синтез α-амилазы, которая расщепляет крахмал до сахаров: реакция с йодом слабеет, а тест Бенедикта становится положительным."]},
+{c:1,en:["Which complex of the mitochondrial electron transport chain pumps no H⁺?",["Complex I","Complex II","Complex III","Complex IV"],"Complex II (succinate dehydrogenase) passes electrons from FADH₂ to CoQ without pumping protons."],ru:["Какой комплекс митохондриальной цепи переноса электронов не перекачивает H⁺?",["Комплекс I","Комплекс II","Комплекс III","Комплекс IV"],"Комплекс II (сукцинатдегидрогеназа) передаёт электроны от ФАДН₂ на CoQ без перекачки протонов."]},
+{c:2,en:["How much fixed carbon can photorespiration waste in hot, dry conditions?",["Under 1%","About 5%","Up to 25-50%","100%"],"Rubisco reacts with O₂ when stomata close, and up to 25-50% of fixed carbon is lost."],ru:["Сколько фиксированного углерода может потерять фотодыхание в жару и сухость?",["Менее 1%","Около 5%","До 25-50%","100%"],"Когда устьица закрыты, Rubisco реагирует с O₂, и теряется до 25-50% фиксированного углерода."]},
+{c:0,en:["Which description fits amylopectin?",["Branched glucose chain with α-1,6 branches","Unbranched β-1,4 glucose chain","Disaccharide of glucose and fructose","A protein of the cell wall"],"Amylopectin has α-1,4 chains with α-1,6 branches every 20-25 glucose units."],ru:["Какое описание подходит амилопектину?",["Разветвлённая цепь глюкозы с α-1,6 ветвлениями","Неразветвлённая β-1,4 цепь глюкозы","Дисахарид из глюкозы и фруктозы","Белок клеточной стенки"],"Амилопектин состоит из α-1,4 цепей с α-1,6 ветвлениями каждые 20-25 остатков глюкозы."]},
+{c:1,en:["Which carbohydrate gives cell walls their tensile strength?",["Starch","Cellulose","Sucrose","Maltose"],"Cellulose is unbranched β-1,4 glucose, the most abundant organic polymer on Earth."],ru:["Какой углевод придаёт клеточным стенкам прочность на растяжение?",["Крахмал","Целлюлоза","Сахароза","Мальтоза"],"Целлюлоза состоит из неразветвлённых β-1,4 цепей глюкозы и является самым распространённым органическим полимером на Земле."]},
+{c:3,en:["A leaf kept in darkness for 24 hours gives a negative iodine test. Why?",["It never contained starch","Iodine does not work in the dark","Starch was turned into cellulose","Transitory starch was degraded and no new starch was made"],"Leaf starch is degraded at night. After 6 hours in light the test becomes positive again."],ru:["Лист продержали в темноте 24 часа, и тест с йодом отрицательный. Почему?",["В нём никогда не было крахмала","Йод не действует в темноте","Крахмал превратился в целлюлозу","Временный крахмал расщепился, а новый не образовывался"],"Крахмал в листьях расщепляется ночью. После 6 часов на свету тест снова становится положительным."]},
+{c:0,en:["What metal cluster is in the oxygen-evolving complex of photosystem II?",["Mn₄Ca","Fe₂S₂","Cu₂","Mg₄"],"The Mn₄Ca cluster splits water: 2 H₂O → O₂ + 4H⁺ + 4e⁻."],ru:["Какой металлический кластер входит в кислород-выделяющий комплекс фотосистемы II?",["Mn₄Ca","Fe₂S₂","Cu₂","Mg₄"],"Кластер Mn₄Ca расщепляет воду: 2 H₂O → O₂ + 4H⁺ + 4e⁻."]},
+{c:2,en:["Which is a plant adaptation to low oxygen (hypoxia)?",["Closing all stomata","Making more chlorophyll","Aerenchyma in the roots","Making more Rubisco"],"Aerenchyma (air spaces) lets O₂ diffuse to flooded roots. Some plants also make ethanol."],ru:["Какое из приспособлений растений помогает при нехватке кислорода (гипоксии)?",["Закрытие всех устьиц","Больше хлорофилла","Аэренхима в корнях","Больше Rubisco"],"Аэренхима (воздухоносные полости) позволяет O₂ диффундировать к затопленным корням. Некоторые растения также образуют этанол."]},
+{c:1,en:["Which substance in a plant extract can give a false positive in Benedict’s test?",["Starch","Vitamin C (ascorbate)","Sucrose","Cellulose"],"Ascorbate also reduces Cu²⁺. Dark extracts should be diluted or treated with activated charcoal."],ru:["Какое вещество в растительном экстракте может дать ложноположительный результат в тесте Бенедикта?",["Крахмал","Витамин C (аскорбат)","Сахароза","Целлюлоза"],"Аскорбат тоже восстанавливает Cu²⁺. Тёмные экстракты нужно разбавлять или обрабатывать активированным углём."]},
+{c:0,en:["Why is sweet corn picked on a hot morning less sweet than corn picked on a cool morning?",["A higher respiration rate uses up the sugars","Photosynthesis makes more starch","Cellulose breaks down","Rubisco is more active"],"Respiration consumes sugar, and it speeds up at higher temperature."],ru:["Почему сладкая кукуруза, собранная жарким утром, менее сладкая, чем собранная прохладным утром?",["Более быстрое дыхание расходует сахара","Фотосинтез создаёт больше крахмала","Распадается целлюлоза","Rubisco становится активнее"],"Дыхание расходует сахар, и при высокой температуре оно идёт быстрее."]},
+{c:2,en:["What is the final electron acceptor in the light reactions and in respiration?",["O₂ in both","NADP⁺ in both","NADP⁺ in light reactions, O₂ in respiration","H₂O in light reactions, CO₂ in respiration"],"Light reactions end with NADP⁺ → NADPH. Respiration ends with O₂ → H₂O."],ru:["Что является конечным акцептором электронов в световых реакциях и в дыхании?",["O₂ в обоих","НАДФ⁺ в обоих","НАДФ⁺ в световых реакциях, O₂ в дыхании","H₂O в световых реакциях, CO₂ в дыхании"],"Световые реакции заканчиваются образованием НАДФН из НАДФ⁺, а дыхание восстановлением O₂ до H₂O."]}
+];
+var L="en",i=0,s=0,done=false;
+var $=function(x){return document.getElementById(x)};
+function render(){
+ var t=T[L];document.documentElement.lang=L;document.title=t.title;$("title").textContent=t.title;
+ $("bEN").setAttribute("aria-pressed",L=="en");$("bRU").setAttribute("aria-pressed",L=="ru");
+ var box=$("box");
+ if(i>=Q.length){
+  $("fill").style.width="100%";$("meta").textContent="";
+  var m=s>=18?t.good:s>=12?t.mid:t.low;
+  box.innerHTML='<div>'+t.done+'</div><div class="score">'+s+' / '+Q.length+'</div><p>'+m+'</p><button class="btn" id="again">'+t.again+'</button>';
+  $("again").onclick=function(){i=0;s=0;done=false;render()};return;
+ }
+ var q=Q[i],d=q[L];
+ $("fill").style.width=(i/Q.length*100)+"%";
+ $("meta").textContent=t.q+" "+(i+1)+" "+t.of+" "+Q.length;
+ var h='<p class="q">'+d[0]+'</p>';
+ d[1].forEach(function(o,k){
+  var cls="opt";if(done){if(k==q.c)cls+=" ok";else if(k==done.k)cls+=" bad"}
+  h+='<button class="'+cls+'" data-k="'+k+'"'+(done?" disabled":"")+'>'+o+'</button>';
+ });
+ if(done){h+='<div class="exp"><b>'+(done.k==q.c?t.right:t.wrong)+'</b> '+d[2]+'</div><button class="btn" id="nx">'+(i==Q.length-1?t.fin:t.next)+'</button>'}
+ box.innerHTML=h;
+ box.querySelectorAll(".opt").forEach(function(b){b.onclick=function(){if(done)return;var k=+b.dataset.k;done={k:k};if(k==q.c)s++;render()}});
+ if(done)$("nx").onclick=function(){i++;done=false;render()};
+}
+$("bEN").onclick=function(){L="en";render()};
+$("bRU").onclick=function(){L="ru";render()};
+render();
+</script>
+</body>
+</html>
